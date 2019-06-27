@@ -1,0 +1,23 @@
+---
+- name: Create /opt/selecter-influxdb directory
+  file:
+    path: /opt/selecter-influxdb
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Extract selecter-influxdb into /opt/selecter-influxdb
+  unarchive:
+    src: selecter-influxdb.tgz
+    dest: /opt/selecter-influxdb
+
+- name: set unit file
+  copy: src=selecter-influxdb.service dest=/etc/systemd/system/selecter-influxdb.service owner=root group=root mode=0644
+
+- name: start selecter-influxdb
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: selecter-influxdb
+    enabled: yes

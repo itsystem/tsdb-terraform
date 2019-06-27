@@ -1,0 +1,25 @@
+---
+- include: nodejs.yml
+
+- name: Create /opt/web-app directory
+  file:
+    path: /opt/web-app
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Extract web-app into /opt/web-app
+  unarchive:
+    src: web-app.tgz
+    dest: /opt/web-app
+
+- name: set unit file
+  copy: src=web-app.service dest=/etc/systemd/system/web-app.service owner=root group=root mode=0644
+
+- name: start web-app
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: web-app
+    enabled: yes

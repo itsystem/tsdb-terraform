@@ -1,0 +1,59 @@
+---
+- sysctl:
+    name: '{{item.key}}'
+    value: '{{item.value}}'
+    state: present
+  with_items:
+    - { key: 'vm.max_map_count', value: '3000000'}
+    - { key: 'vm.swappiness', value: '1'}
+    - { key: 'fs.file-max', value: '3000000'}
+    - { key: 'fs.nr_open', value: '3000000'}
+
+- name: Download m3db tgz
+  get_url:
+    url: https://github.com/m3db/m3/releases/download/v0.10.2/m3_0.10.2_linux_amd64.tar.gz
+    dest: /opt/m3_0.10.2_linux_amd64.tar.gz
+    mode: '0644'
+
+- name: Extract m3db into /opt/
+  unarchive:
+    src: /opt/m3_0.10.2_linux_amd64.tar.gz
+    dest: /opt/
+    remote_src: yes
+
+- name: Create conf directory
+  file:
+    path: /opt/m3_0.10.2_linux_amd64/conf
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Create m3db directory
+  file:
+    path: /var/lib/m3db
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Create m3kv directory
+  file:
+    path: /var/lib/m3kv
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: copy config
+  copy: src=config.yml dest=/opt/m3_0.10.2_linux_amd64/conf/config.yml owner=root group=root mode=0644
+
+- name: set unit file
+  copy: src=m3dbnode.service dest=/etc/systemd/system/m3dbnode.service owner=root group=root mode=0644
+
+- name: start m3dbnode
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: m3dbnode
+    enabled: yes

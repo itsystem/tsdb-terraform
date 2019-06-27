@@ -1,0 +1,35 @@
+---
+- name: set nodesource repo
+  copy: src=nodesource.list dest=/etc/apt/sources.list.d/nodesource.list owner=root group=root mode=0644
+  when: ansible_distribution == "Ubuntu"
+
+- name: install nodejs
+  apt:
+    name: nodejs
+    update_cache: yes
+  when: ansible_distribution == "Ubuntu"
+
+
+
+- name: Import Nodesource RPM key
+  rpm_key:
+    key: https://rpm.nodesource.com/pub/el/NODESOURCE-GPG-SIGNING-KEY-EL
+    state: present
+  when: ansible_distribution == "CentOS"
+
+- name: Add Nodesource repositories for Node.js (CentOS 7+).
+  yum:
+    name: "https://rpm.nodesource.com/pub_10.x/el/7/x86_64/nodesource-release-el7-1.noarch.rpm"
+    state: present
+  when: ansible_distribution == "CentOS"
+
+- name: Ensure Node.js and npm are installed.
+  yum: name=nodejs state=latest enablerepo='nodesource'
+  when: ansible_distribution == "CentOS"
+
+- name: Create a symbolic link
+  file:
+    src: /usr/bin/node
+    dest: /usr/bin/nodejs
+    state: link
+  when: ansible_distribution == "CentOS"

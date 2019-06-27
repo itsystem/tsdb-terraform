@@ -1,0 +1,23 @@
+---
+- name: Create /opt/relay-clickhouse directory
+  file:
+    path: /opt/relay-clickhouse
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Extract relay-clickhouse into /opt/relay-clickhouse
+  unarchive:
+    src: relay-clickhouse.tgz
+    dest: /opt/relay-clickhouse
+
+- name: set unit file
+  copy: src=relay-clickhouse.service dest=/etc/systemd/system/relay-clickhouse.service owner=root group=root mode=0644
+
+- name: start relay-clickhouse
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: relay-clickhouse
+    enabled: yes

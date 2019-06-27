@@ -1,0 +1,18 @@
+#vi /etc/systemd/system/relay-influxdb.service
+#chmod 664 /etc/systemd/system/relay-influxdb.service
+#systemctl --system daemon-reload
+#systemctl enable relay-influxdb
+[Unit]
+Description=relay-influxdb
+Requires=network.target remote-fs.target nss-lookup.target
+
+[Service]
+PIDFile=/var/run/relay-influxdb.pid
+ExecStart=/opt/relay-influxdb/rel-infl
+WorkingDirectory=/opt/relay-influxdb
+Restart=always
+RestartSec=1min
+SyslogIdentifier=relay-influxdb
+
+[Install]
+WantedBy=multi-user.target

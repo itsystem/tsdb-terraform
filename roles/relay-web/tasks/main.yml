@@ -1,0 +1,25 @@
+---
+- include: nodejs.yml
+
+- name: Create /opt/relay-web directory
+  file:
+    path: /opt/relay-web
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Extract relay-web into /opt/relay-web
+  unarchive:
+    src: relay-web.tgz
+    dest: /opt/relay-web
+
+- name: set unit file
+  copy: src=relay-web.service dest=/etc/systemd/system/relay-web.service owner=root group=root mode=0644
+
+- name: start relay-web
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: relay-web
+    enabled: yes

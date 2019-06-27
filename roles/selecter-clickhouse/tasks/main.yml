@@ -1,0 +1,23 @@
+---
+- name: Create /opt/selecter-clickhouse directory
+  file:
+    path: /opt/selecter-clickhouse
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Extract selecter-clickhouse into /opt/selecter-clickhouse
+  unarchive:
+    src: selecter-clickhouse.tgz
+    dest: /opt/selecter-clickhouse
+
+- name: set unit file
+  copy: src=selecter-clickhouse.service dest=/etc/systemd/system/selecter-clickhouse.service owner=root group=root mode=0644
+
+- name: start selecter-clickhouse
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: selecter-clickhouse
+    enabled: yes

@@ -1,0 +1,18 @@
+#vi /etc/systemd/system/selecter-influxdb.service
+#chmod 664 /etc/systemd/system/selecter-influxdb.service
+#systemctl --system daemon-reload
+#systemctl enable selecter-influxdb
+[Unit]
+Description=selecter-influxdb
+Requires=network.target remote-fs.target nss-lookup.target
+
+[Service]
+PIDFile=/var/run/selecter-influxdb.pid
+ExecStart=/usr/bin/node /opt/selecter-influxdb/selecter.js
+WorkingDirectory=/opt/selecter-infxludb
+Restart=always
+RestartSec=1min
+SyslogIdentifier=selecter-influxdb
+
+[Install]
+WantedBy=multi-user.target

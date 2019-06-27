@@ -1,0 +1,18 @@
+#vi /etc/systemd/system/web-app.service
+#chmod 664 /etc/systemd/system/web-app.service
+#systemctl --system daemon-reload
+#systemctl enable web-app
+[Unit]
+Description=web-app
+Requires=network.target remote-fs.target nss-lookup.target
+
+[Service]
+PIDFile=/var/run/web-app.pid
+ExecStart=/usr/bin/node /opt/web-app/index.js
+WorkingDirectory=/opt/web-app
+Restart=always
+RestartSec=1min
+SyslogIdentifier=web-app
+
+[Install]
+WantedBy=multi-user.target

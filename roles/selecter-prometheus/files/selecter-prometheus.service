@@ -1,0 +1,18 @@
+#vi /etc/systemd/system/selecter-prometheus.service
+#chmod 664 /etc/systemd/system/selecter-prometheus.service
+#systemctl --system daemon-reload
+#systemctl enable selecter-prometheus
+[Unit]
+Description=selecter-prometheus
+Requires=network.target remote-fs.target nss-lookup.target
+
+[Service]
+PIDFile=/var/run/selecter-prometheus.pid
+ExecStart=/usr/bin/node /opt/selecter-prometheus/selecter.js
+WorkingDirectory=/opt/selecter-prometheus
+Restart=always
+RestartSec=1min
+SyslogIdentifier=selecter-prometheus
+
+[Install]
+WantedBy=multi-user.target

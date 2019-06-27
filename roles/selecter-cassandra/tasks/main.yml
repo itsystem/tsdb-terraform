@@ -1,0 +1,23 @@
+---
+- name: Create /opt/selecter-cassandra directory
+  file:
+    path: /opt/selecter-cassandra
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Extract selecter-cassandra into /opt/selecter-cassandra
+  unarchive:
+    src: selecter-cassandra.tgz
+    dest: /opt/selecter-cassandra
+
+- name: set unit file
+  copy: src=selecter-cassandra.service dest=/etc/systemd/system/selecter-cassandra.service owner=root group=root mode=0644
+
+- name: start selecter-cassandra
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: selecter-cassandra
+    enabled: yes

@@ -1,0 +1,112 @@
+---
+- hosts: mysql
+  name: mysql
+  become: true
+  roles:
+    - mysql
+  tags:
+    - mysql
+
+- hosts: influxdb
+  name: influxdb
+  become: true
+  roles:
+    - influxdb
+  tags:
+    - influxdb
+
+- hosts: prometheus
+  name: prometheus
+  become: true
+  roles:
+    - prometheus
+  tags:
+    - prometheus
+
+- hosts: m3db
+  name: m3db
+  become: true
+  roles:
+    - m3db
+  tags:
+    - m3db
+
+- hosts: cassandra
+  name: cassandra
+  become: true
+  roles:
+    - cassandra
+  tags:
+    - cassandra
+
+- hosts: clickhouse
+  name: clickhouse
+  become: true
+  roles:
+    - clickhouse
+  tags:
+    - clickhouse
+
+- hosts: dbs
+  name: relay-web
+  become: true
+  roles:
+    - relay-web
+  tags:
+    - relay-web
+
+- hosts: clickhouse1
+  name: relay-clickhouse
+  become: true
+  roles:
+    - relay-clickhouse
+  tags:
+    - relay-clickhouse
+
+- hosts: clickhouse1
+  name: selecter-clickhouse
+  become: true
+  roles:
+    - selecter-clickhouse
+  tags:
+    - selecter-clickhouse
+
+- hosts: cassandra1
+  name: relay-cassandra
+  become: true
+  roles:
+    - relay-cassandra
+  tags:
+    - relay-cassandra
+
+- hosts: influxdb
+  name: relay-influxdb
+  become: true
+  roles:
+    - relay-influxdb
+  tags:
+    - relay-influxdb
+
+- hosts: influxdb
+  name: selecter-influxdb
+  become: true
+  roles:
+    - selecter-influxdb
+  tags:
+    - selecter-influxdb
+
+- hosts: prometheus
+  name: selecter-prometheus
+  become: true
+  roles:
+    - selecter-prometheus
+  tags:
+    - selecter-prometheus
+
+- hosts: web
+  name: web
+  become: true
+  roles:
+    - web
+  tags:
+    - web

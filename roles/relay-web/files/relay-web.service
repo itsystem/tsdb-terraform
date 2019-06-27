@@ -1,0 +1,18 @@
+#vi /etc/systemd/system/relay-web.service
+#chmod 664 /etc/systemd/system/relay-web.service
+#systemctl --system daemon-reload
+#systemctl enable relay-web
+[Unit]
+Description=relay-web
+Requires=network.target remote-fs.target nss-lookup.target
+
+[Service]
+PIDFile=/var/run/relay-web.pid
+ExecStart=/usr/bin/node /opt/relay-web/relay-web.js
+WorkingDirectory=/opt/relay-web/
+Restart=always
+RestartSec=1min
+SyslogIdentifier=relay-web
+
+[Install]
+WantedBy=multi-user.target

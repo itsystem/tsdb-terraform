@@ -1,0 +1,23 @@
+---
+- name: Create /opt/relay-influxdb directory
+  file:
+    path: /opt/relay-influxdb
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Extract relay-influxdb into /opt/relay-influxdb
+  unarchive:
+    src: relay-influxdb.tgz
+    dest: /opt/relay-influxdb
+
+- name: set unit file
+  copy: src=relay-influxdb.service dest=/etc/systemd/system/relay-influxdb.service owner=root group=root mode=0644
+
+- name: start relay-influxdb
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: relay-influxdb
+    enabled: yes

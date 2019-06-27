@@ -1,0 +1,18 @@
+#vi /etc/systemd/system/selecter-cassandra.service
+#chmod 664 /etc/systemd/system/selecter-cassandra.service
+#systemctl --system daemon-reload
+#systemctl enable selecter-cassandra
+[Unit]
+Description=selecter-cassandra
+Requires=network.target remote-fs.target nss-lookup.target
+
+[Service]
+PIDFile=/var/run/selecter-cassandra.pid
+ExecStart=/usr/bin/node /opt/selecter-cassandra/selecter.js
+WorkingDirectory=/opt/selecter-cassandra
+Restart=always
+RestartSec=1min
+SyslogIdentifier=selecter-cassandra
+
+[Install]
+WantedBy=multi-user.target

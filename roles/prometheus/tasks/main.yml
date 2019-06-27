@@ -1,0 +1,42 @@
+---
+- name: Add the user prometheus
+  user:
+    name: prometheus
+
+- name: Download prometheus tgz
+  get_url:
+    url: https://github.com/prometheus/prometheus/releases/download/v2.10.0/prometheus-2.10.0.linux-amd64.tar.gz
+    dest: /opt/prometheus-2.10.0.linux-amd64.tar.gz
+    mode: '0644'
+
+- name: Extract prometheus into /opt/
+  unarchive:
+    src: /opt/prometheus-2.10.0.linux-amd64.tar.gz
+    dest: /opt/
+    remote_src: yes
+
+- name: Create data directory
+  file:
+    path: /opt/prometheus-2.10.0.linux-amd64/data
+    state: directory
+    mode: '0755'
+    owner: prometheus
+    group: prometheus
+
+- name: Recursively change ownership of a directory
+  file:
+    path: /opt/prometheus-2.10.0.linux-amd64
+    state: directory
+    recurse: yes
+    owner: prometheus
+    group: prometheus
+
+- name: set unit file
+  copy: src=prometheus.service dest=/etc/systemd/system/prometheus.service owner=root group=root mode=0644
+
+- name: start prometheus
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: prometheus
+    enabled: yes

@@ -1,0 +1,23 @@
+---
+- name: Create /opt/relay-cassandra directory
+  file:
+    path: /opt/relay-cassandra
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Extract relay-cassandra into /opt/relay-cassandra
+  unarchive:
+    src: relay-cassandra.tgz
+    dest: /opt/relay-cassandra
+
+- name: set unit file
+  copy: src=relay-cassandra.service dest=/etc/systemd/system/relay-cassandra.service owner=root group=root mode=0644
+
+- name: start relay-cassandra
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: relay-cassandra
+    enabled: yes

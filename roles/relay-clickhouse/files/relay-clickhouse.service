@@ -1,0 +1,18 @@
+#vi /etc/systemd/system/relay-clickhouse.service
+#chmod 664 /etc/systemd/system/relay-clickhouse.service
+#systemctl --system daemon-reload
+#systemctl enable relay-clickhouse
+[Unit]
+Description=relay-clickhouse
+Requires=network.target remote-fs.target nss-lookup.target
+
+[Service]
+PIDFile=/var/run/relay-clickhouse.pid
+ExecStart=/opt/relay-clickhouse/rel-ch
+WorkingDirectory=/opt/relay-clickhouse
+Restart=always
+RestartSec=1min
+SyslogIdentifier=relay-clickhouse
+
+[Install]
+WantedBy=multi-user.target

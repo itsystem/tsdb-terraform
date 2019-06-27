@@ -1,0 +1,20 @@
+[Unit]
+Description=Prometheus Server
+Documentation=https://prometheus.io/docs/introduction/overview/
+After=network-online.target
+
+[Service]
+User=prometheus
+Restart=on-failure
+
+LimitNOFILE=262144
+LimitNPROC=16384
+
+#Change this line if you download the
+#Prometheus on different path user
+ExecStart=/opt/prometheus-2.10.0.linux-amd64/prometheus \
+  --config.file=/opt/prometheus-2.10.0.linux-amd64/prometheus.yml \
+  --storage.tsdb.path=/opt/prometheus-2.10.0.linux-amd64/data
+
+[Install]
+WantedBy=multi-user.target

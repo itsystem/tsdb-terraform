@@ -1,0 +1,29 @@
+---
+- name: set clickhouse repo
+  copy: src=clickhouse.list dest=/etc/apt/sources.list.d/clickhouse.list owner=root group=root mode=0644
+
+- name: Add an apt key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: E0C56BD4
+
+- name: install clickhouse
+  apt:
+    name: '{{ item }}'
+    update_cache: yes
+    state: present
+  with_items:
+    - dirmngr
+    - clickhouse-client
+    - clickhouse-server
+
+- name: set clickhouse conf
+  template: src=config.xml.j2 dest=/etc/clickhouse-server/config.xml owner=root group=root mode=0644
+  notify: Restart Clickhouse
+
+- name: start clickhouse-server
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: clickhouse-server
+    enabled: yes
